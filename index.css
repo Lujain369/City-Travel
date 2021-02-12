@@ -8,13 +8,10 @@ body{
     padding: 0;
     margin: 0;
     min-height: 100%;
-    
-    
-    
-}
-.gridContainer {
     display: flex;
     flex-direction: column;
+    min-width: 100%;
+    
 }
 
 .item1{
@@ -48,9 +45,9 @@ body{
 }
 .item2{
     
-    border: 5px solid rgb(160, 160, 160);
-    height: 5cm;
-    width: 100%;
+   
+    height: 100%;
+    min-width: 100%;
     display: flex;
     justify-content: center;
 
@@ -59,9 +56,9 @@ body{
 .container{
    padding-top: 1.3cm;
    height: 55px;
-   margin-right: -19cm;
+   
    display: flex;
-   margin-left:10cm ;
+   
    
    
 }
@@ -99,7 +96,7 @@ body{
     
     display: flex;
     flex-direction: column;
-    margin-left:20cm ;
+    padding-left: 1cm;
     padding-top: 0.2cm;
    
 }
@@ -111,7 +108,7 @@ body{
 .item3Container{
     justify-content: center;
     display: flex;
-    border: 2px solid black;
+    
 }
  .item3{
     
@@ -122,7 +119,7 @@ body{
     background-color: rgba(204, 204, 204, 0.623);
     color: black;
     border-radius: 10px;
-    border: 2px solid black;
+    
     flex-direction: column;
    }
 
