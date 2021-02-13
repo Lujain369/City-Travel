@@ -8,7 +8,7 @@ let checkboxAlpha = document.querySelector("#check3t");
 let Item3= document.querySelector('.item3');
 
 //dsgs
-let parent = document.querySelector('.item3');
+
 button.addEventListener('click', function(){
 fetch("https://api.openweathermap.org/data/2.5/weather?q="+inputValue.value+"&appid=ee6dd9a7c626a42fc312a735b559fe70&units=metric")
 .then(response=>response.json())
@@ -79,3 +79,85 @@ const venueRequest = new XMLHttpRequest();
 venueRequest.open("GET", venueUrl);
 venueRequest.responseType = "json";
 
+if (checkboxAttractions.checked === true) {
+    venueRequest.onload = function () {
+      const venues = venueRequest.response.response.groups[0].items;
+
+      let attraOutput = document.createElement("div");
+      attraOutput.className = "attra";
+
+      let attraH1 = document.createElement("h1");
+      attraH1.id = "attraH1Id";
+      attraH1.innerHTML = "Attractions";
+
+      let sortVenue = [];
+      for (let i = 0; i < 10; i++) {
+        sortVenue[i] = {
+          Namn: venues[i].venue.name,
+          Address: venues[i].venue.location,
+        };
+        //console.log(sortVenue[i]);
+      }
+      
+if (checkboxAlpha.checked === true) {
+    sortVenue.sort(function (a, b) {
+            var x = a.Namn.toLowerCase();
+            var y = b.Namn.toLowerCase();
+            if (x < y) {
+              return -1;
+            }
+            if (x > y) {
+              return 1;
+            }
+             return 0;
+          });
+          //console.log(sortVenue);
+
+          for (let i = 0; i < 10; i++) {
+            //let venuePick = sortVenue[i].Namn;
+            let venueAddress = sortVenue[i].Address;
+  
+            
+            let div = document.createElement("div");
+            let attractions = document.createElement("h4");
+            let address = document.createElement("p");
+  
+            
+            div.id = "attractions";
+            address.innerHTML = "<br>Address: <br>" + venueAddress.address;
+            attractions.innerHTML = sortVenue[i].Namn;
+  
+            Item3.appendChild(attraH1);
+            div.appendChild(attractions);
+            div.appendChild(address);
+            attrOutput.appendChild(div);
+            Item3.appendChild(attraOutput);
+            //console.log(`${venuePick.name}`);
+          }
+
+        } else {
+            for (let i = 0; i < 10; i++) {
+              let venuePick = venues[i].venue;
+              let venueAddress = venues[i].venue.location;
+    
+              let div = document.createElement("div");
+              let attractions = document.createElement("h4");
+              let address = document.createElement("p");
+    
+              
+              div.id = "attractions";
+              address.innerHTML = "<br>Address: <br>" + venueAddress.address;
+              attractions.innerHTML = venuePick.name;
+    
+              Item3.appendChild(attraH1);
+              div.appendChild(attractions);
+              div.appendChild(address);
+              attraOutput.appendChild(div);
+              Item3.appendChild(attraOutput);
+              //console.log(`${venuePick.name}`);
+            }
+          }
+        };
+
+        
+  
