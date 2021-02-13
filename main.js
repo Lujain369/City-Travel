@@ -9,7 +9,16 @@ let Item3= document.querySelector('.item3');
 
 //dsgs
 
-button.addEventListener('click', function(){
+button.addEventListener("click", function () {
+    removeAttr();
+    if (checkboxWeather.checked === false && checkboxAttractions.checked === false) {
+      let Nothing2show = document.createElement("h2");
+      Nothing2show.innerHTML =
+        "No information to show. Check somthing in!";
+      Nothing2show.id = "noId";
+      Item3.appendChild(Nothing2show);
+    }
+
 fetch("https://api.openweathermap.org/data/2.5/weather?q="+inputValue.value+"&appid=ee6dd9a7c626a42fc312a735b559fe70&units=metric")
 .then(response=>response.json())
 //.then(data=> console.log(data))
@@ -99,8 +108,8 @@ if (checkboxAttractions.checked === true) {
         //console.log(sortVenue[i]);
       }
       
-if (checkboxAlpha.checked === true) {
-    sortVenue.sort(function (a, b) {
+     if (checkboxAlpha.checked === true) {
+            sortVenue.sort(function (a, b) {
             var x = a.Namn.toLowerCase();
             var y = b.Namn.toLowerCase();
             if (x < y) {
@@ -159,5 +168,43 @@ if (checkboxAlpha.checked === true) {
           }
         };
 
-        
+        venueRequest.send();
+
+    } else {
+      alert("Press attraction checkbox to get attractions.");
+      let removeAttrHeader = document.querySelector("#attraH1Id");
+      let removeAttrOutput = document.querySelector(".attra");
+      Item3.removeChild(removeAttrOutput);
+      Item3.removeChild(removeAttrHeader);
+    }
+    
+  
+  checkboxAlpha.addEventListener("click", function () {
+    if (checkboxAlpha.checked === true) {
+        checkboxAttractions.checked = true;
+    }
+  });
+  
+  function removeAttr() {
+    let removeWeather = document.querySelectorAll("#weatherOutput");
+    let removeHeader = document.querySelectorAll("#attraH1Id");
+    let topattr = document.querySelectorAll("#attractions");
+    let removeAttrDiv = document.querySelectorAll(".attra");
+    let removeNoOptions = document.querySelectorAll("#noId");
+    for (var i = 0; i < topattr.length; i++) {
+      topattr[i].remove();
+    }
+    for (var x = 0; x < removeWeather.length; x++) {
+      removeWeather[x].remove();
+    }
+    for (var y = 0; y < removeHeader.length; y++) {
+      removeHeader[y].remove();
+    }
+    for (var y = 0; y < removeAttrDiv.length; y++) {
+      removeAttrDiv[y].remove();
+    }
+    for (var y = 0; y < removeNoOptions.length; y++) {
+      removeNoOptions[y].remove();
+    }
+  }
   
