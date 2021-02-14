@@ -3,14 +3,14 @@ let inputValue= document.querySelector('#inputClass');
 
 let checkboxWeather = document.querySelector("#check1");
 let checkboxAttractions = document.querySelector("#check2");
-let checkboxAlpha = document.querySelector("#check3t");
+let checkboxAlpha = document.querySelector("#check3");
 
 let Item3= document.querySelector('.item3');
 
 //dsgs
 
 button.addEventListener("click", function () {
-    removeAttr();
+  removeElement();
     if (checkboxWeather.checked === false && checkboxAttractions.checked === false) {
       let Nothing2show = document.createElement("h2");
       Nothing2show.innerHTML =
@@ -19,85 +19,76 @@ button.addEventListener("click", function () {
       Item3.appendChild(Nothing2show);
     }
 
-fetch("https://api.openweathermap.org/data/2.5/weather?q="+inputValue.value+"&appid=ee6dd9a7c626a42fc312a735b559fe70&units=metric")
-.then(response=>response.json())
-//.then(data=> console.log(data))
-
-.then(data=> {
- let nameValaue= data['name'];
- let tempValue= data['main']['temp'];
- let conditionValue= data['weather'][0]['description'];
-
-
- if (checkboxWeather.checked === true) {
-    let cityName = document.createElement('h1');
-    let temp = document.createElement('p');
-    let condition = document.createElement('p');
-    let weatherOutput = document.createElement("div");
+  fetch("https://api.openweathermap.org/data/2.5/weather?q="+inputValue.value+"&appid=ee6dd9a7c626a42fc312a735b559fe70&units=metric")
+    .then(response=>response.json())
+    .then(data=> console.log(data))
+    .then(data=> {
+      let nameValaue= data['name'];
+      let tempValue= data['main']['temp'];
+      let conditionValue= data['weather'][0]['description'];
 
 
-    weatherOutput.id = "weatherOutput";
+      if (checkboxWeather.checked === true) {
+        let cityName = document.createElement('h1');
+        let temp = document.createElement('p');
+        let condition = document.createElement('p');
+        let weatherOutput = document.createElement("div");
 
-    cityName.id = "Cname";
-    cityNames.innerHTML = nameValaue;
+        weatherOutput.id = "weatherOutput";
 
-    temp.id = "Ctemp";
-    temp.innerHTML = tempValue + " °C";
+        cityName.id = "cityName";
+        cityName.innerHTML = nameValaue;
 
-    condition.id = "CC";
-    condition.innerHTML = conditionValue;
+        temp.id = "cityTemp";
+        temp.innerHTML = tempValue + " °C";
 
-        
-        
-    weatherOutput.appendChild(cityName);
-    weatherOutput.appendChild(temp);
-     weatherOutput.appendChild(condition);
-    Item3.appendChild(weatherOutput);
+        condition.id = "condition";
+        condition.innerHTML = conditionValue;
  
- }else {
+        weatherOutput.appendChild(cityName);
+        weatherOutput.appendChild(temp);
+        weatherOutput.appendChild(condition);
+        Item3.appendChild(weatherOutput);
+ 
+      } else {
         alert("Press weather checkbox to get weather information.");
         
         let removeDivWeather = document.querySelector("#weatherOutput");
-
-        
         Item3.removeChild(removeDivWeather);   
-    }
+      }
+    })
 
+    .catch(err=> alert("No City found!"))
+
+  //foursqure men i XMLHttpRequest istället för fetch
+  const clientId = "J4MCXX0FXC0OB4DOCLMF3CMPUSWK3FXDQLWNPQFRN4Y3SGM3";
+  const clientSecret = "KI5OXWD21JUZLOGVHTPSFJRCPQD1YC5XU0BLYK5AAYC1YYVQ";
+
+  const todaysDate = "20210212";
  
-})
+  const venueUrl = new URL("https://api.foursquare.com/v2/venues/explore");
+  venueUrl.searchParams.append("client_id", clientId);
+  venueUrl.searchParams.append("client_secret", clientSecret);
+  venueUrl.searchParams.append("near", inputValue.value);
+  venueUrl.searchParams.append("v", todaysDate);
+  venueUrl.searchParams.append("limit", 10);
+  console.log(venueUrl);
 
-.catch(err=> alert("No City found!"))
+  const venueRequest = new XMLHttpRequest();
+  venueRequest.open("GET", venueUrl);
+  venueRequest.responseType = "json";
 
-})
+  if (checkboxAttractions.checked === true) {
 
-//foursqure men i XMLHttpRequest
-const clientId = "J4MCXX0FXC0OB4DOCLMF3CMPUSWK3FXDQLWNPQFRN4Y3SGM3";
-const clientSecret = "KI5OXWD21JUZLOGVHTPSFJRCPQD1YC5XU0BLYK5AAYC1YYVQ";
-
-const todaysDate = "20210212";
-
-const venueUrl = new URL("https://api.foursquare.com/v2/venues/explore");
-venueUrl.searchParams.append("client_id", clientId);
-venueUrl.searchParams.append("client_secret", clientSecret);
-venueUrl.searchParams.append("near", inputValue.value);
-venueUrl.searchParams.append("v", todaysDate);
-venueUrl.searchParams.append("limit", 10);
-console.log(venueUrl);
-
-const venueRequest = new XMLHttpRequest();
-venueRequest.open("GET", venueUrl);
-venueRequest.responseType = "json";
-
-if (checkboxAttractions.checked === true) {
     venueRequest.onload = function () {
+
       const venues = venueRequest.response.response.groups[0].items;
+      let attractiosnOutPut= document.createElement("div");
+      attractiosnOutPut.className = "attractionsDiv";
 
-      let attraOutput = document.createElement("div");
-      attraOutput.className = "attra";
-
-      let attraH1 = document.createElement("h1");
-      attraH1.id = "attraH1Id";
-      attraH1.innerHTML = "Attractions";
+      let attractionsH2 = document.createElement("h2");
+      attractionsH2.id = "attractionsH2";
+      attractionsH2.innerHTML = "Attractions";
 
       let sortVenue = [];
       for (let i = 0; i < 10; i++) {
@@ -105,7 +96,7 @@ if (checkboxAttractions.checked === true) {
           Namn: venues[i].venue.name,
           Address: venues[i].venue.location,
         };
-        //console.log(sortVenue[i]);
+        console.log(sortVenue[i]);
       }
       
      if (checkboxAlpha.checked === true) {
@@ -120,28 +111,26 @@ if (checkboxAttractions.checked === true) {
             }
              return 0;
           });
-          //console.log(sortVenue);
+           console.log(sortVenue);
 
           for (let i = 0; i < 10; i++) {
-            //let venuePick = sortVenue[i].Namn;
+            let venuePick = sortVenue[i].Namn;
             let venueAddress = sortVenue[i].Address;
   
-            
             let div = document.createElement("div");
-            let attractions = document.createElement("h4");
+            let attractionsH4 = document.createElement("h4");
             let address = document.createElement("p");
   
-            
             div.id = "attractions";
             address.innerHTML = "<br>Address: <br>" + venueAddress.address;
-            attractions.innerHTML = sortVenue[i].Namn;
+            attractionsH4.innerHTML = sortVenue[i].Namn;
   
-            Item3.appendChild(attraH1);
-            div.appendChild(attractions);
+            Item3.appendChild(attractionsH2);
+            div.appendChild(attractionsH4);
             div.appendChild(address);
-            attrOutput.appendChild(div);
-            Item3.appendChild(attraOutput);
-            //console.log(`${venuePick.name}`);
+            attractiosnOutPut.appendChild(div);
+            Item3.appendChild(attractiosnOutPut);
+            console.log(`${venuePick.name}`);
           }
 
         } else {
@@ -150,20 +139,20 @@ if (checkboxAttractions.checked === true) {
               let venueAddress = venues[i].venue.location;
     
               let div = document.createElement("div");
-              let attractions = document.createElement("h4");
+              let attractionsH4 = document.createElement("h4");
               let address = document.createElement("p");
     
               
               div.id = "attractions";
               address.innerHTML = "<br>Address: <br>" + venueAddress.address;
-              attractions.innerHTML = venuePick.name;
+              attractionsH4.innerHTML = venuePick.name;
     
-              Item3.appendChild(attraH1);
-              div.appendChild(attractions);
+              Item3.appendChild(attractionsH2);
+              div.appendChild(attractionsH4);
               div.appendChild(address);
-              attraOutput.appendChild(div);
-              Item3.appendChild(attraOutput);
-              //console.log(`${venuePick.name}`);
+              attractiosnOutPut.appendChild(div);
+              Item3.appendChild(attractiosnOutPut);
+              console.log(`${venuePick.name}`);
             }
           }
         };
@@ -172,24 +161,23 @@ if (checkboxAttractions.checked === true) {
 
     } else {
       alert("Press attraction checkbox to get attractions.");
-      let removeAttrHeader = document.querySelector("#attraH1Id");
-      let removeAttrOutput = document.querySelector(".attra");
+      let removeAttrHeader = document.querySelector("#attractionsH2");
+      let removeAttrOutput = document.querySelector(".attractionsDiv");
       Item3.removeChild(removeAttrOutput);
       Item3.removeChild(removeAttrHeader);
     }
-    
-  
+  });  
   checkboxAlpha.addEventListener("click", function () {
     if (checkboxAlpha.checked === true) {
         checkboxAttractions.checked = true;
     }
   });
   
-  function removeAttr() {
+  function removeElement() {
     let removeWeather = document.querySelectorAll("#weatherOutput");
-    let removeHeader = document.querySelectorAll("#attraH1Id");
+    let removeHeader = document.querySelectorAll("#attractionsH2");
     let topattr = document.querySelectorAll("#attractions");
-    let removeAttrDiv = document.querySelectorAll(".attra");
+    let removeAttrDiv = document.querySelectorAll(".attractionsDiv");
     let removeNoOptions = document.querySelectorAll("#noId");
     for (var i = 0; i < topattr.length; i++) {
       topattr[i].remove();
