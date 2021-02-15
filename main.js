@@ -1,5 +1,5 @@
 let button= document.querySelector('#close_btn');
-let inputValue= document.querySelector('#inputClass');
+let inputValue= document.querySelector('#inputID');
 
 let checkboxWeather = document.querySelector("#check1");
 let checkboxAttractions = document.querySelector("#check2");
@@ -7,21 +7,29 @@ let checkboxAlpha = document.querySelector("#check3");
 
 let Item3= document.querySelector('.item3');
 
-//dsgs
+let today = new Date();
+let dd = String(today.getDate()).padStart(2, "0");
+let mm = String(today.getMonth() + 1).padStart(2, "0");
+let yyyy = String(today.getFullYear());
+
+today = yyyy + mm + dd;
+
 
 button.addEventListener("click", function () {
   removeElement();
     if (checkboxWeather.checked === false && checkboxAttractions.checked === false) {
       let Nothing2show = document.createElement("h2");
       Nothing2show.innerHTML =
-        "No information to show. Check somthing in!";
+        "Inget att visa, checka något i checkboxarna!";
       Nothing2show.id = "noId";
       Item3.appendChild(Nothing2show);
     }
 
-  fetch("https://api.openweathermap.org/data/2.5/weather?q="+inputValue.value+"&appid=ee6dd9a7c626a42fc312a735b559fe70&units=metric")
+ fetch("https://api.openweathermap.org/data/2.5/weather?q="+inputValue.value+
+ "&appid=ee6dd9a7c626a42fc312a735b559fe70&units=metric&lang=sv")
     .then(response=>response.json())
     .then(data=> console.log(data))
+
     .then(data=> {
       let nameValaue= data['name'];
       let tempValue= data['main']['temp'];
@@ -29,13 +37,13 @@ button.addEventListener("click", function () {
 
 
       if (checkboxWeather.checked === true) {
-        let cityName = document.createElement('h1');
+        let cityName = document.createElement('h2');
         let temp = document.createElement('p');
         let condition = document.createElement('p');
         let weatherOutput = document.createElement("div");
 
         weatherOutput.id = "weatherOutput";
-
+        cityName2.id = "wId";
         cityName.id = "cityName";
         cityName.innerHTML = nameValaue;
 
@@ -46,7 +54,7 @@ button.addEventListener("click", function () {
         condition.innerHTML = conditionValue;
  
         weatherOutput.appendChild(cityName);
-        weatherOutput.appendChild(temp);
+        weatherOutput.appendChild (temp);
         weatherOutput.appendChild(condition);
         Item3.appendChild(weatherOutput);
  
@@ -54,22 +62,22 @@ button.addEventListener("click", function () {
         alert("Press weather checkbox to get weather information.");
         
         let removeDivWeather = document.querySelector("#weatherOutput");
-        Item3.removeChild(removeDivWeather);   
+        Item3.remove(removeDivWeather);   
       }
     })
 
-    .catch(err=> alert("No City found!"))
+    .catch(err=> alert("No City found!"));
 
   //foursqure men i XMLHttpRequest istället för fetch
   const clientId = "J4MCXX0FXC0OB4DOCLMF3CMPUSWK3FXDQLWNPQFRN4Y3SGM3";
   const clientSecret = "KI5OXWD21JUZLOGVHTPSFJRCPQD1YC5XU0BLYK5AAYC1YYVQ";
+  const cityName2 = inputValue.value;
+  const todaysDate = today;
 
-  const todaysDate = "20210212";
- 
   const venueUrl = new URL("https://api.foursquare.com/v2/venues/explore");
   venueUrl.searchParams.append("client_id", clientId);
   venueUrl.searchParams.append("client_secret", clientSecret);
-  venueUrl.searchParams.append("near", inputValue.value);
+  venueUrl.searchParams.append("near", cityName2);
   venueUrl.searchParams.append("v", todaysDate);
   venueUrl.searchParams.append("limit", 10);
   console.log(venueUrl);
