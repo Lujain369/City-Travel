@@ -7,6 +7,7 @@ let checkboxAlpha = document.querySelector("#check3");
 
 let Item3= document.querySelector('.item3');
 
+//Today= är dagens datum.
 let today = new Date();
 let dd = String(today.getDate()).padStart(2, "0");
 let mm = String(today.getMonth() + 1).padStart(2, "0");
@@ -14,7 +15,7 @@ let yyyy = String(today.getFullYear());
 
 today = yyyy + mm + dd;
 
-
+// Button är kopplat till knappen "sök", när man söker utan att ha kryssat i boxarna så kommer inget fram förutom Nothing2show.
 button.addEventListener("click", function () {
   removeElement();
     if (checkboxWeather.checked === false && checkboxAttractions.checked === false) {
@@ -22,14 +23,12 @@ button.addEventListener("click", function () {
       Nothing2show.innerHTML =
         "Inget att visa, checka något i checkboxarna!";
       Nothing2show.id = "noId";
-      Item3.appendChild(Nothing2show);
+      Item3.appendChild(Nothing2show); // placeras i diven Item3.
     }
-
+//fetchar fram  urlen som behövs, inputValue är sökboxen och value är vad användaren skriver in i sökboxen.
  fetch("https://api.openweathermap.org/data/2.5/weather?q="+inputValue.value+
  "&appid=ee6dd9a7c626a42fc312a735b559fe70&units=metric&lang=sv")
     .then(response=>response.json())
-    .then(data=> console.log(data))
-
     .then(data=> {
       let nameValaue= data['name'];
       let tempValue= data['main']['temp'];
@@ -43,7 +42,7 @@ button.addEventListener("click", function () {
         let weatherOutput = document.createElement("div");
 
         weatherOutput.id = "weatherOutput";
-        cityName2.id = "wId";
+        cityName2.id = "wId"; 
         cityName.id = "cityName";
         cityName.innerHTML = nameValaue;
 
@@ -59,20 +58,19 @@ button.addEventListener("click", function () {
         Item3.appendChild(weatherOutput);
  
       } else {
-        alert("Press weather checkbox to get weather information.");
         
         let removeDivWeather = document.querySelector("#weatherOutput");
         Item3.remove(removeDivWeather);   
       }
     })
 
-    .catch(err=> alert("No City found!"));
+    .catch(err=> alert("No City found!")); //Om användaren skriver in något som inte går att hitta så kommer det upp en alert.
 
-  //foursqure men i XMLHttpRequest istället för fetch
+  //fixar fram urlen från Foursquare men i XMLHttpRequest istället för fetch.
   const clientId = "J4MCXX0FXC0OB4DOCLMF3CMPUSWK3FXDQLWNPQFRN4Y3SGM3";
   const clientSecret = "KI5OXWD21JUZLOGVHTPSFJRCPQD1YC5XU0BLYK5AAYC1YYVQ";
   const cityName2 = inputValue.value;
-  const todaysDate = today;
+  const todaysDate = today; //Dagens datum för att api ska funka.
 
   const venueUrl = new URL("https://api.foursquare.com/v2/venues/explore");
   venueUrl.searchParams.append("client_id", clientId);
@@ -86,6 +84,7 @@ button.addEventListener("click", function () {
   venueRequest.open("GET", venueUrl);
   venueRequest.responseType = "json";
 
+  //Om  attracktionboxen är checkad så funkar if stasten annars...läs längre ner.
   if (checkboxAttractions.checked === true) {
 
     venueRequest.onload = function () {
@@ -96,7 +95,7 @@ button.addEventListener("click", function () {
 
       let attractionsH2 = document.createElement("h2");
       attractionsH2.id = "attractionsH2";
-      attractionsH2.innerHTML = "Attractions";
+      attractionsH2.innerHTML = "Attraktioner";
 
       let sortVenue = [];
       for (let i = 0; i < 10; i++) {
@@ -106,7 +105,7 @@ button.addEventListener("click", function () {
         };
         console.log(sortVenue[i]);
       }
-      
+      //Fixar så attraktioner hamar i bokstavsording. 
      if (checkboxAlpha.checked === true) {
             sortVenue.sort(function (a, b) {
             var x = a.Namn.toLowerCase();
@@ -141,7 +140,7 @@ button.addEventListener("click", function () {
             console.log(`${venuePick.name}`);
           }
 
-        } else {
+        } else { //Annars om användaren inte kryssar i för få allt i bostavording så placeras attraktioner bara sårdär, 10 st.
             for (let i = 0; i < 10; i++) {
               let venuePick = venues[i].venue;
               let venueAddress = venues[i].venue.location;
@@ -167,20 +166,21 @@ button.addEventListener("click", function () {
 
         venueRequest.send();
 
-    } else {
-      alert("Press attraction checkbox to get attractions.");
+    } else { //Denna tar ju bort allt med attraktioner att göra(div, h2..osv) om användaren inte ha kryssat i boxen.
+      
       let removeAttrHeader = document.querySelector("#attractionsH2");
       let removeAttrOutput = document.querySelector(".attractionsDiv");
       Item3.removeChild(removeAttrOutput);
       Item3.removeChild(removeAttrHeader);
     }
   });  
+// Checkboxen som sorterar efter bostavsordingen funkar bara om attraktionsboxen är ikryssat.
   checkboxAlpha.addEventListener("click", function () {
     if (checkboxAlpha.checked === true) {
         checkboxAttractions.checked = true;
     }
   });
-  
+  //Funktion är skapad för att ropas upp, den tar bort allt, vädret, staden, attraktioner. Ropas upp när inget av checkboxarna är ikryssat.
   function removeElement() {
     let removeWeather = document.querySelectorAll("#weatherOutput");
     let removeHeader = document.querySelectorAll("#attractionsH2");

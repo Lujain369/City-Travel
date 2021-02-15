@@ -27,9 +27,7 @@ body{
     text-transform: uppercase;
     display: flex;
     order:2;
-   
     margin-left: -0.5cm;
-    
 }
 
 .airplaneImg{
@@ -37,7 +35,6 @@ body{
     width: 60px;
     height: 60px;
     order: 1;
-    
     padding-right:0.5cm ;
     padding-left: 0.5cm;
     padding-top: 0.25cm;
@@ -79,7 +76,6 @@ body{
   outline: none;
   text-transform: uppercase;
   font-weight: bold;
-   
   }
 
 .checkbox_container{
@@ -95,7 +91,6 @@ body{
     flex-direction: row;
 }
 
-
 .item3{
     margin-top: 15px;
     text-align: center;
@@ -107,20 +102,19 @@ body{
     margin-left: auto;
     margin-right: auto;
     width: 300px;
-    text-transform: capitalize;
-    border: 2px solid rgb(2, 2, 2);
-    border-radius: 5px;
+    text-transform: uppercase;
+    border: 2px solid gray ;
+    border-radius: 50px;
   }
 
   #weatherOutput p, .weatherOutput h2{
-    border-bottom:dashed 1px  black;
     margin: 5px;
   }
 
 .attractionsDiv {
     display: flex;
     flex-wrap: wrap;
-    border: 2px solid rgb(145, 145, 145);
+    border: 2px solid gray;
     padding: 20px;
     margin: 10px;
     border-radius: 5px;
@@ -135,9 +129,9 @@ body{
     flex: 30%;
     max-width: 300px;
     min-width: 250px;
-    text-transform: capitalize;
-    border: 2px solid rgb(0, 0, 0);
-    border-radius: 5px;
+    text-transform: uppercase;
+    border: 2px solid gray;
+    border-radius: 50px;
   }
 
 
@@ -147,6 +141,7 @@ body{
     text-align: center;
     color: #ccc;
     position: fixed;
+    text-transform: uppercase;
 }
 
 label {
